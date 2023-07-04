@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Chat Bot</title>
+        <style>
+            body{
+                font-family: Arial, Helvetica, sans-serif;
+                padding: 20px;
+                background-color: #1f1d1b;
+            }
+            h1{
+                text-align: center;
+                margin-bottom: 20px;
+                color: navy;
+                font-size: 28px;
+                text-shadow: 2px 2px lightgray;
+            }
+
+            a.back_button {
+                display: inline-block;
+                padding: 10px 20px;
+                background-color: #3498db;
+                color: #fff;
+                text-decoration: none;
+                border-radius: 4px;
+                transition: background-color 0.3s ease;
+            }
+
+            a.back_button:hover {
+                background-color: #2980b9;
+            }
+
+            
+            #chatbox{
+                background-color: black;
+                border: 1px solid #ccc;
+                border-radius:10px;
+                padding: 10px;
+                height: 300px;
+                overflow-y: scroll;
+                margin-bottom: 20px;
+            }
+            #chatbox::-webkit-scrollbar {
+                display: none;
+            }
+
+            #input{
+                width:100%;
+                padding:10px;
+                font-size: 18px;
+                margin-bottom: 20px;
+                border:1px solid #333;
+                border-radius: 5px;
+            }
+            button{
+                background-color: gold;
+                color:black;
+                padding:10px;
+                font-size: 18px;
+                border:none;
+                border-radius: 5px;
+                cursor:pointer;
+            }
+            p{
+                margin:0;
+                padding:10px;
+            }
+            
+            .user {
+                background-image: linear-gradient(to right, #bde2ff, #94c5ff);
+                float: right;
+                clear: both;
+                border-radius: 20px 20px 0 20px;
+                margin-bottom: 10px;
+                width: auto;
+                padding: 10px 15px;
+                border: 2px solid white;
+                position: relative;
+                z-index: 1;
+                animation: none;
+            }
+
+            .chatbot {
+                background-image: linear-gradient(to right, #ffbbbb, #ff8c8c);
+                float: left;
+                clear: both;
+                border-radius: 20px 20px 20px 0;
+                margin-bottom: 10px;
+                width: auto;
+                padding: 10px 15px;
+                border: 2px solid white;
+                position: relative;
+                z-index: 1;
+                animation: fadeIn 0.3s ease-in-out;
+            }
+            
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: scale(0.9);
+                }
+                to {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+            }
+         </style>
+        </head>
+        
+        <body>    
+            <span><a href="https://www.youtube.com/" class="back_button">Back to diary</a></span>
+            <!-- <h1>ChatBot</h1> -->
+            <h1>
+                <span style="color: #005eff; font-size: 45px;">C</span>
+                <span style="color: #ff1a00; font-size: 45px;">h</span>
+                <span style="color: #ffaa00; font-size: 45px;">a</span>
+                <span style="color: #008000; font-size: 45px;">t</span>
+                <span style="color: #c20088; font-size: 45px;">B</span>
+                <span style="color: #005eff; font-size: 45px;">o</span>
+                <span style="color: #ff1a00; font-size: 45px;">t</span>
+            </h1>
+            <div id="chatbox"></div>
+            <input id="input" type="text"/>
+            <button onclick="sendMessage()">Send</button>
+            
+            <script>
+                function sendMessage() {
+                    var input = document.getElementById("input").value;
+                    document.getElementById("input").value = "";
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("GET", "/get?msg=" + input, true);
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+                            var chatbox = document.getElementById("chatbox");
+                            var response = xhr.responseText;
+                            var userMessage = "<p class='user'><b>User:</b>" + input + "</p>";
+                            var chatbotMessage = "<p class='chatbot'><b>Chatbot:</b>" + response + "</p>";
+                            chatbox.innerHTML += userMessage + chatbotMessage;
+                            chatbox.scrollTop = chatbox.scrollHeight;
+                            animateNewMessages();
+                        }
+                    };
+                    xhr.send();
+                }
+            
+                function animateNewMessages() {
+                    var chatbotMessages = document.getElementsByClassName("chatbot");
+                    var lastMessage = chatbotMessages[chatbotMessages.length - 1];
+                    lastMessage.addEventListener("animationend", function () {
+                        lastMessage.style.animation = "none";
+                    });
+                }
+            </script>
+            
+        </body>
+</html>
