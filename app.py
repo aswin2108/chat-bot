@@ -39,4 +39,4 @@ def generate_response_gpt3(user_message, model, api_key):
     return response['choices'][0]['text'].strip()[len(prompt):]
 
 if __name__=="__main__":
-    app.run()
+    app.run(debug = False, host = '0.0.0.0')
